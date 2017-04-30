@@ -136,6 +136,9 @@ function drawTerms(results) {
     progress.setAttribute("max", "1");
     confidence.appendChild(progress);
 
+    var carbonScore = row.insertCell(2);
+    carbonScore.innerHTML = term[2] + '';
+
     loading.style = "visibility: hidden";
   });
 }
