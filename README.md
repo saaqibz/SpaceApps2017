@@ -15,7 +15,9 @@ python3 server.py
 
 
 ## Screens
-![Screens](http://i.imgur.com/d8UBSDv.png)
+![Screen](http://i.imgur.com/Kzwi295.png)
+
+![Screen](http://i.imgur.com/d8UBSDv.png)
 
 
 
