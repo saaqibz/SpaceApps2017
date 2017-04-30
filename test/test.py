@@ -2,7 +2,7 @@ import requests
 import base64
 
 url = "http://127.0.0.1:5000/predict"
-f = open('./ben-franklin.gif', 'rb')
+f = open('./burger.jpeg', 'rb')
 json = {
     "image": base64.b64encode(f.read()).decode('UTF-8')
 }

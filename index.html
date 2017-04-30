@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <style>
+  #image-preview {
+    float: left;
+    margin: 10px 20px;
+    max-height: 200px;
+    max-width: 500px;
+    border: 1px solid #ddd;
+    visibility: hidden;
+  }
+
+  #predictions {
+    display: inline-block;
+    width: 500px;
+    border: 1px solid #ddd;
+    padding: 20px;
+  }
+
+  #loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    visibility: hidden;
+  }
+
+  </style>
+
+</head>
+<body>
+
+<h2>Feed your pet</h2>
+
+<input type="file" onchange="onChangeImage(this)"><br>
+
+<img alt="image-preview" id="image-preview" height="200" alt="Image preview..." src=""/>
+
+<table id="predictions" class="table table-striped">
+  <thead>
+    <tr>
+      <td>Term</td>
+      <td>Confidence (%)</td>
+    </tr>
+  </thead>
+</table>
+
+<div id="loading">
+  <img src="./loading.gif" height="200" />
+</div>
+
+</form>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
+<script>
+var API_SERVER = 'http://127.0.0.1:5000';
+var predictions = document.getElementById('predictions');
+var previewImage = document.getElementById('image-preview');
+var loading = document.getElementById('loading');
+function onChangeImage(elem) {
+  loading.style = "visibility: visible";
+  var file    = elem.files[0];
+  var reader  = new FileReader();
+  var previewReader = new FileReader();
+
+  reader.addEventListener("load", onImageLoad, false);
+  // SO HACKY!
+  previewReader.addEventListener("load", function() {
+    previewImage.style = "visibility: visible;";
+    previewImage.src = this.result;
+  }, false);
+
+  if (file) {
+    reader.readAsBinaryString(file);
+    previewReader.readAsDataURL(file);
+  }
+}
+
+function onImageLoad()
+{
+  var reader = this;
+  clearRows();
+  predict(reader.result)
+    .then(drawTerms);
+}
+
+function clearRows() {
+  // Delete all the rows
+  var rowCount = predictions.rows.length;
+  for (var i = rowCount - 1; i > 0; --i) {
+    predictions.deleteRow(i);
+  }
+}
+
+function predict(imageData) {
+  var fetchOptions = {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+    },
+    mode: 'cors',
+    body: JSON.stringify({ image: btoa(imageData) })
+  };
+
+  return fetch(API_SERVER + '/predict', fetchOptions)
+    .then(function(resp) {
+      return resp.json()
+    })
+    .then(function(resp) {
+      return resp.results;
+    });
+}
+
+function drawTerms(results) {
+  results.map(function(term) {
+    var row = predictions.insertRow()
+    
+    var termValue = row.insertCell(0);
+    termValue.innerHTML = term[0];
+    
+    var confidence = row.insertCell(1);
+    var progress = document.createElement("PROGRESS");
+    progress.setAttribute("value", term[1]+'');
+    progress.setAttribute("max", "1");
+    confidence.appendChild(progress);
+
+    loading.style = "visibility: hidden";
+  });
+}
+
+</script>
+</body>
+</html>

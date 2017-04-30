@@ -1,8 +1,11 @@
+import json
 import base64
 from flask import Flask, request
+from flask_cors import CORS, cross_origin
 from clarifai.rest import ClarifaiApp
 
 app = Flask(__name__)
+CORS(app)
 clarifai = ClarifaiApp("-5SCxYdY0ifm_2aSIIKI-XfJ3oKnmS0xDWwR2Z4Q", "BKHGuWa_cHGBns7p92DCHX9Cq6Gug788HQcwwwh6")
 
 @app.route("/")
@@ -17,7 +20,7 @@ def predict():
     model = clarifai.models.get("general-v1.3")    
     # predict with the model
     resp = model.predict_by_base64(img)
-    return "{}".format(_get_terms(resp))
+    return json.dumps({'results': _get_terms(resp)})
 
 
 def _get_terms(resp):
