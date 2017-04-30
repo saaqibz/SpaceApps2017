@@ -30,12 +30,14 @@ def predict():
     model = clarifai.models.get("general-v1.3")    
     # predict with the model
     resp = model.predict_by_base64(img)
-    return json.dumps({'results': _get_terms(resp)})
+    terms = _get_terms(resp)
+    add_carbon_scores(terms)
+    return json.dumps({'results': terms})
 
 
 def _get_terms(resp):
     term_objs = resp['outputs'][0]['data']['concepts']
-    return [(t['name'], t['value']) for t in term_objs]
+    return [[t['name'], t['value']] for t in term_objs]
 
 def _get_image_from_request(request):
     image_str = request.get_json()['image']

@@ -4,8 +4,8 @@ import csv
 from server import add_carbon_scores, load_carbon_scores
 
 def test1():
-    url = "http://127.0.0.1:5000/predict"
-    f = open('./burger.jpeg', 'rb')
+    url = "http://127.0.0.1:8080/predict"
+    f = open('./ben-franklin.gif', 'rb')
     json = {
         "image": base64.b64encode(f.read()).decode('UTF-8')
     }
@@ -23,5 +23,5 @@ def test2():
     print(terms)
 
 if __name__ == '__main__':
-    #test1()
-    test2()
+    test1()
+    #test2()
