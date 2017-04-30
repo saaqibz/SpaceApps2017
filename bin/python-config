@@ -1,4 +1,4 @@
-#!/Users/saz/Workspace/spaceapps/spaceapps/bin/python
+#!/Users/saz/Workspace/spaceapps/bin/python
 
 import sys
 import getopt
