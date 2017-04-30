@@ -15,6 +15,10 @@ python3 server.py
 
 
 ## Response Screen
+![Response Screen](http://i.imgur.com/d8UBSDv.png)
+
+### Loading Screen
+[Imgur](http://i.imgur.com/Kzwi295.png)
 
 
 
