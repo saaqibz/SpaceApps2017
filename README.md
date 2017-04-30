@@ -14,11 +14,8 @@ python3 server.py
 2) Upload a file
 
 
-## Response Screen
-![Response Screen](http://i.imgur.com/d8UBSDv.png)
-
-### Loading Screen
-![Loading Screen](http://i.imgur.com/Kzwi295.png)
+## Screens
+![Screens](http://i.imgur.com/d8UBSDv.png)
 
 
 
