@@ -27,7 +27,7 @@ def hello():
 def predict():
     img = _get_image_from_request(request)
     # get the general model
-    model = clarifai.models.get("general-v1.3")    
+    model = clarifai.models.get("food")    
     # predict with the model
     resp = model.predict_by_base64(img)
     terms = _get_terms(resp)
